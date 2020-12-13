@@ -12,7 +12,17 @@ import java.util.*;
 public class ResultsDao implements DAO<Results> {
     List<Results> resultsList = new ArrayList<>();
     String resultsFileName = "results.csv";
-//    List<List<String>> answersList = new ArrayList<>();
+
+    List<List<String>> answersList = new ArrayList<>();
+
+    public List<List<String>> getAnswersList() {
+        return answersList;
+    }
+
+    public void setAnswersList(List<List<String>> answersList) {
+        this.answersList = answersList;
+    }
+    //    List<List<String>> answersList = new ArrayList<>();
 
 //    public void setAnswersList(List<List<String>> answersList) {
 //        this.answersList = answersList;

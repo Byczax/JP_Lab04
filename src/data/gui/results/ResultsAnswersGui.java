@@ -45,7 +45,7 @@ public class ResultsAnswersGui {
                 if (fieldType.equals(FieldType.STRING)){
                     List<String> answers = new ArrayList<>();
 //                    answers = resultsGui.getAnswersList().stream().map(list -> list.get(id));
-                    var tempList = resultsGui.getAnswersList();
+                    var tempList = answersList;
                     for (var list: tempList
                          ) {
                         answers.add( list.get(id));

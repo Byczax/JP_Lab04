@@ -26,10 +26,10 @@ public class ResultsGui {
 
 
     List<List<String>> answersList = new ArrayList<>();
-
-    public List<List<String>> getAnswersList() {
-        return answersList;
-    }
+//
+//    public List<List<String>> getAnswersList() {
+//        return answersList;
+//    }
 
     List<Fields> fieldsList;
 
@@ -47,8 +47,9 @@ public class ResultsGui {
 
                 Survey ourSurvey = findNameSurvey(surveyId);
                 Service ourService = findNameService(serviceId);
+                resultsDao.setAnswersList(surveyAnswers(ourSurvey,ourService));
                 answersList = surveyAnswers(ourSurvey,ourService);
-//                var answersFields = surveyFields((ourSurvey));
+
 
                 openAnswers(fieldsList);
 
@@ -121,6 +122,7 @@ public class ResultsGui {
         JPanel root = resultsAnswersGui.getResultAnswerPanel();
         JFrame frame = new JFrame();
         resultsAnswersGui.createTable(answersFields);
+        resultsAnswersGui.setAnswersList(answersList);
         frame.setTitle("Surveys results");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setContentPane(root);
