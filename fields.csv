@@ -1,0 +1,6 @@
+a7839a27-b270-48a8-ba9b-2c90af6c795c;How fast;INTEGER
+b24e326d-03f3-4e08-bf2e-7e9fef7be26e;Hardness;INTEGER
+b24e326d-03f3-4e08-bf2e-7e9fef7be26e;Feeling;STRING
+b24e326d-03f3-4e08-bf2e-7e9fef7be26e;Length;INTEGER
+a7839a27-b270-48a8-ba9b-2c90af6c795c;How long;INTEGER
+a7839a27-b270-48a8-ba9b-2c90af6c795c;Comment;STRING

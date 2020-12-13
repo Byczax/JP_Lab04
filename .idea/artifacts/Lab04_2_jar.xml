@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Lab04_2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Lab04_2_jar</output-path>
+    <root id="archive" name="Lab04_2.jar">
+      <element id="module-output" name="Lab04_2" />
+      <element id="directory" name="src">
+        <element id="dir-copy" path="$PROJECT_DIR$/src" />
+      </element>
+      <element id="extracted-dir" path="$PROJECT_DIR$/xchart-3.6.6.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
