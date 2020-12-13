@@ -68,7 +68,7 @@ public class ClientFillGui {
                     } else {
                         answers.add(JOptionPane.showInputDialog(null,
                                 field.getName(),
-                                "Wrong value, enter value again, numer 0-10",
+                                "Question " + i,
                                 JOptionPane.PLAIN_MESSAGE));
                     }
                     i++;

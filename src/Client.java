@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class Client {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> createGUI());
+        SwingUtilities.invokeLater(Client::createGUI);
     }
 
     private static void createGUI(){

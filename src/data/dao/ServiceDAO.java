@@ -45,7 +45,7 @@ public class ServiceDAO implements DAO<Service> {
             Scanner data = new Scanner(new File(filename));
             while (data.hasNext()) {
                 String row = data.nextLine();
-                String[] strData = row.split(";");
+                String[] strData = row.split(";",-1);
                 serviceList.add(new Service(UUID.fromString(strData[0]), strData[1], strData[2]));
             }
         } catch (FileNotFoundException e) {

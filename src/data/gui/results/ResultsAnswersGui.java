@@ -2,12 +2,10 @@ package data.gui.results;
 
 import data.dao.FieldsDao;
 import data.dao.ResultsDao;
-import data.models.FieldType;
-import data.models.Fields;
+import data.dao.SurveyDAO;
+import data.models.*;
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
-import org.knowm.xchart.XChartPanel;
-
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -26,6 +23,9 @@ public class ResultsAnswersGui {
     private JButton seeResultsButton;
 
     private final FieldsDao fieldsDao = new FieldsDao();
+    private ResultsDao resultsDao = new ResultsDao();
+    private SurveyDAO surveyDAO = new SurveyDAO();
+    private ResultsGui resultsGui = new ResultsGui();
 
     List<List<String>> answersList;
 
@@ -33,32 +33,43 @@ public class ResultsAnswersGui {
         this.answersList = answersList;
     }
 
-//    ResultsGui resultsGui = new ResultsGui();
-        ResultsDao resultsDao = new ResultsDao();
-
     public ResultsAnswersGui() {
         seeResultsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 int id = surveyFieldTable.getSelectedRow();
+                String fieldName = surveyFieldTable.getValueAt(id,0).toString();
+                FieldType fieldType = FieldType.valueOf( surveyFieldTable.getValueAt(id,1).toString());
 
-                var answersForField = resultsDao.getAnswersList().get(id);
-                if (surveyFieldTable.getValueAt(id, 1).equals(FieldType.INTEGER)) {
-                    histChart(surveyFieldTable.getValueAt(id, 1).toString(), answersForField);
-
-                } else {
-                    ResultsAnswersStringGui resultsGui = new ResultsAnswersStringGui();
-                    JPanel root = resultsGui.getStringPanel();
-                    JFrame frame = new JFrame();
-                    resultsGui.createList(answersForField);
-                    frame.setTitle("Surveys results");
-                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    frame.setContentPane(root);
-                    frame.pack();
-                    frame.setLocationRelativeTo(null);
-                    frame.setMinimumSize(new Dimension(300, 300));
-                    frame.setVisible(true);
+                if (fieldType.equals(FieldType.STRING)){
+                    List<String> answers = new ArrayList<>();
+//                    answers = resultsGui.getAnswersList().stream().map(list -> list.get(id));
+                    var tempList = resultsGui.getAnswersList();
+                    for (var list: tempList
+                         ) {
+                        answers.add( list.get(id));
+                    }
+                    createStringAnswers(answers);
                 }
+
+//                var answersForField = answersList.get(id);
+//                if (surveyFieldTable.getValueAt(id, 1).equals(FieldType.INTEGER)) {
+//                    histChart(surveyFieldTable.getValueAt(id, 1).toString(), answersForField);
+//
+//                } else {
+//                    ResultsAnswersStringGui resultsGui = new ResultsAnswersStringGui();
+//                    JPanel root = resultsGui.getStringPanel();
+//                    JFrame frame = new JFrame();
+//                    resultsGui.createList(answersForField);
+//                    frame.setTitle("Surveys results");
+//                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//                    frame.setContentPane(root);
+//                    frame.pack();
+//                    frame.setLocationRelativeTo(null);
+//                    frame.setMinimumSize(new Dimension(300, 300));
+//                    frame.setVisible(true);
+//                }
             }
         });
     }
@@ -67,15 +78,27 @@ public class ResultsAnswersGui {
         return ResultAnswerPanel;
     }
 
-    public void createTable(UUID whichSurvey) {
+//    public void createTable(UUID whichSurvey) {
+//        surveyFieldTable.setDefaultEditor(Object.class, null);
+//        DefaultTableModel tableModel = new DefaultTableModel();
+//        tableModel.setColumnIdentifiers(new Object[]{"Service", "Survey"});
+//        for (Fields fields : fieldsDao.getAll()) {
+//            var name = fields.getName();
+//            var type = fields.getType();
+//            if (fields.getUuid().equals(whichSurvey))
+//                tableModel.addRow(new Object[]{name, type});
+//        }
+//        surveyFieldTable.setModel(tableModel);
+//    }
+    public void createTable(List<Fields> answers){
         surveyFieldTable.setDefaultEditor(Object.class, null);
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new Object[]{"Service", "Survey"});
-        for (Fields fields : fieldsDao.getAll()) {
-            var name = fields.getName();
-            var type = fields.getType();
-            if (fields.getUuid().equals(whichSurvey))
-                tableModel.addRow(new Object[]{name, type});
+        for (Fields fields: answers
+             ) {
+            String fieldName = fields.getName();
+            var fieldType = fields.getType();
+        tableModel.addRow(new Object[]{fieldName,fieldType});
         }
         surveyFieldTable.setModel(tableModel);
     }
@@ -85,7 +108,6 @@ public class ResultsAnswersGui {
         for (String s : myResults) intList.add(Integer.valueOf(s));
         CategoryChart myChart = new CategoryChartBuilder().title(chartTitle).xAxisTitle("Value").yAxisTitle("Number of answers").build();
         myChart.getStyler().setPlotGridLinesVisible(true);
-//        myChart.getStyler().setDatePattern("yyyy");
         List<Integer> categories = IntStream.range(0, 11).boxed().collect(Collectors.toList());
         List<Long> heights = categories.stream()
                 .mapToLong(category -> intList.stream()
@@ -94,8 +116,25 @@ public class ResultsAnswersGui {
                 .boxed()
                 .collect(Collectors.toList());
         myChart.addSeries("ResultSValues", categories, heights);
-
-
     }
+
+    private void createStringAnswers(List<String> answers){
+//        ResultsAnswersGui resultsAnswersGui = new ResultsAnswersGui();
+        ResultsAnswersStringGui resultsAnswersStringGui = new ResultsAnswersStringGui();
+        JPanel root = resultsAnswersStringGui.getStringPanel();
+        JFrame frame = new JFrame();
+        resultsAnswersStringGui.createList(answers);
+        frame.setTitle("Surveys results");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setContentPane(root);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setMinimumSize(new Dimension(300,300));
+        frame.setVisible(true);
+    }
+
+
+
+
 
 }

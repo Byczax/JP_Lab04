@@ -7,23 +7,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 public class ResultsDao implements DAO<Results> {
     List<Results> resultsList = new ArrayList<>();
     String resultsFileName = "results.csv";
-    List<List<String>> answersList = new ArrayList<>();
+//    List<List<String>> answersList = new ArrayList<>();
 
-    public void setAnswersList(List<List<String>> answersList) {
-        this.answersList = answersList;
-    }
-
-    public List<List<String>> getAnswersList() {
-        return answersList;
-    }
+//    public void setAnswersList(List<List<String>> answersList) {
+//        this.answersList = answersList;
+//    }
+//
+//    public List<List<String>> getAnswersList() {
+//        return answersList;
+//    }
 
     @Override
     public List<Results> getAll() {
@@ -54,10 +51,8 @@ public class ResultsDao implements DAO<Results> {
             while (data.hasNext()) {
                 List<String> answers = new ArrayList<>();
                 String row = data.nextLine();
-                String[] strData = row.split(";");
-                for (int i = 3; strData.length > i; i++) {
-                    answers.add(strData[i]);
-                }
+                String[] strData = row.split(";",-1);
+                answers.addAll(Arrays.asList(strData).subList(3, strData.length));
                 resultsList.add(new Results(strData[0], UUID.fromString(strData[1]), UUID.fromString(strData[2]), answers));
             }
         } catch (FileNotFoundException e) {

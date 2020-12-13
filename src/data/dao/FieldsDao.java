@@ -45,7 +45,7 @@ public class FieldsDao implements DAO<Fields> {
             Scanner data = new Scanner(new File(filename));
             while (data.hasNext()) {
                 String row = data.nextLine();
-                String[] strData = row.split(";");
+                String[] strData = row.split(";",-1);
                 fieldsList.add(new Fields(UUID.fromString(strData[0]), strData[1], FieldType.valueOf(strData[2])));
             }
         } catch (FileNotFoundException e) {
