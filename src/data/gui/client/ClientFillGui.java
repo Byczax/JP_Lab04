@@ -24,57 +24,54 @@ public class ClientFillGui {
     private ResultsDao resultsDao = new ResultsDao();
 
     public ClientFillGui() {
-        fillChoosenSurveyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int id = surveysTable.getSelectedRow();
-                String serviceName = surveysTable.getValueAt(id, 0).toString();
-                String surveyName = surveysTable.getValueAt(id, 1).toString();
-                UUID surveyId = findIdSurvey(surveyName).getUUID();
-                UUID serviceId = findIdService(serviceName).getUUID();
-                List<Fields> fieldsList = new ArrayList<>();
-                for (Fields field : fieldsDao.getAll()
-                ) {
-                    if (field.getUuid().equals(surveyId)) {
-                        fieldsList.add(field);
-                    }
+        fillChoosenSurveyButton.addActionListener(e -> {
+            int id = surveysTable.getSelectedRow();
+            String serviceName = surveysTable.getValueAt(id, 0).toString();
+            String surveyName = surveysTable.getValueAt(id, 1).toString();
+            UUID surveyId = findIdSurvey(surveyName).getUUID();
+            UUID serviceId = findIdService(serviceName).getUUID();
+            List<Fields> fieldsList = new ArrayList<>();
+            for (Fields field : fieldsDao.getAll()
+            ) {
+                if (field.getUuid().equals(surveyId)) {
+                    fieldsList.add(field);
                 }
-                int i = 0;
-                List<String> answers = new ArrayList<>();
-                String filledField;
-                for (Fields field : fieldsList
-                ) {
-                    boolean correct = false;
-                    if (field.getType().equals(FieldType.INTEGER)) {
-
-                        filledField = JOptionPane.showInputDialog(null,
-                                field.getName(),
-                                "Question " + i,
-                                JOptionPane.PLAIN_MESSAGE
-                        );
-                        while (!correct) {
-                            if (Integer.parseInt(filledField) < 0 || Integer.parseInt(filledField) > 10) {
-
-                                filledField = JOptionPane.showInputDialog(null,
-                                        field.getName(),
-                                        "Wrong value, enter value again, numer 0-10",
-                                        JOptionPane.PLAIN_MESSAGE
-                                );
-                            } else {
-                                correct = true;
-                                answers.add(filledField);
-                            }
-                        }
-                    } else {
-                        answers.add(JOptionPane.showInputDialog(null,
-                                field.getName(),
-                                "Question " + i,
-                                JOptionPane.PLAIN_MESSAGE));
-                    }
-                    i++;
-                }
-                resultsDao.add(new Results(username, serviceId, surveyId, answers));
             }
+            int i = 0;
+            List<String> answers = new ArrayList<>();
+            String filledField;
+            for (Fields field : fieldsList
+            ) {
+                boolean correct = false;
+                if (field.getType().equals(FieldType.INTEGER)) {
+
+                    filledField = JOptionPane.showInputDialog(null,
+                            field.getName(),
+                            "Question " + i + "(Integer value 1-10)",
+                            JOptionPane.PLAIN_MESSAGE
+                    );
+                    while (!correct) {
+                        if (Integer.parseInt(filledField) < 0 || Integer.parseInt(filledField) > 10) {
+
+                            filledField = JOptionPane.showInputDialog(null,
+                                    field.getName(),
+                                    "Wrong value, enter value again, numer 0-10",
+                                    JOptionPane.PLAIN_MESSAGE
+                            );
+                        } else {
+                            correct = true;
+                            answers.add(filledField);
+                        }
+                    }
+                } else {
+                    answers.add(JOptionPane.showInputDialog(null,
+                            field.getName(),
+                            "Question " + i,
+                            JOptionPane.PLAIN_MESSAGE));
+                }
+                i++;
+            }
+            resultsDao.add(new Results(username, serviceId, surveyId, answers));
         });
     }
 

@@ -1,6 +1,5 @@
 package data.models;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,31 +20,16 @@ public class Results {
         return serviceId;
     }
 
-    public void setServiceId(UUID serviceId) {
-        this.serviceId = serviceId;
-    }
-
     public UUID getSurveyId() {
         return surveyId;
-    }
-
-    public void setSurveyId(UUID surveyId) {
-        this.surveyId = surveyId;
     }
 
     public List<String> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<String> answers) {
-        this.answers = answers;
-    }
-
     public String getUser() {
         return user;
     }
 
-    public void setUser(String user) {
-        this.user = user;
-    }
 }

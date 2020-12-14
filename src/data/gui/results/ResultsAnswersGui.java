@@ -6,6 +6,8 @@ import data.dao.SurveyDAO;
 import data.models.*;
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XChartPanel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -27,49 +29,31 @@ public class ResultsAnswersGui {
     private SurveyDAO surveyDAO = new SurveyDAO();
     private ResultsGui resultsGui = new ResultsGui();
 
-    List<List<String>> answersList;
+    List<List<String>> answersList = new ArrayList<>();
 
     public void setAnswersList(List<List<String>> answersList) {
+        this.answersList = new ArrayList<>();
         this.answersList = answersList;
     }
 
     public ResultsAnswersGui() {
-        seeResultsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        seeResultsButton.addActionListener(e -> {
+            int id = surveyFieldTable.getSelectedRow();
+            String fieldName = surveyFieldTable.getValueAt(id, 0).toString();
+            FieldType fieldType = FieldType.valueOf(surveyFieldTable.getValueAt(id, 1).toString());
 
-                int id = surveyFieldTable.getSelectedRow();
-                String fieldName = surveyFieldTable.getValueAt(id,0).toString();
-                FieldType fieldType = FieldType.valueOf( surveyFieldTable.getValueAt(id,1).toString());
+            List<String> answers = new ArrayList<>();
+            for (var list : answersList
+            ) {
+                answers.add(list.get(id));
+            }
+            if (fieldType.equals(FieldType.STRING)) {
+                createStringAnswers(answers);
+            } else if (fieldType.equals(FieldType.INTEGER)) {
 
-                if (fieldType.equals(FieldType.STRING)){
-                    List<String> answers = new ArrayList<>();
-//                    answers = resultsGui.getAnswersList().stream().map(list -> list.get(id));
-                    var tempList = answersList;
-                    for (var list: tempList
-                         ) {
-                        answers.add( list.get(id));
-                    }
-                    createStringAnswers(answers);
-                }
+                CategoryChart chart = histChart(fieldName, answers);
 
-//                var answersForField = answersList.get(id);
-//                if (surveyFieldTable.getValueAt(id, 1).equals(FieldType.INTEGER)) {
-//                    histChart(surveyFieldTable.getValueAt(id, 1).toString(), answersForField);
-//
-//                } else {
-//                    ResultsAnswersStringGui resultsGui = new ResultsAnswersStringGui();
-//                    JPanel root = resultsGui.getStringPanel();
-//                    JFrame frame = new JFrame();
-//                    resultsGui.createList(answersForField);
-//                    frame.setTitle("Surveys results");
-//                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//                    frame.setContentPane(root);
-//                    frame.pack();
-//                    frame.setLocationRelativeTo(null);
-//                    frame.setMinimumSize(new Dimension(300, 300));
-//                    frame.setVisible(true);
-//                }
+//                    new SwingWrapper<CategoryChart>(chart).displayChart();
             }
         });
     }
@@ -78,32 +62,20 @@ public class ResultsAnswersGui {
         return ResultAnswerPanel;
     }
 
-//    public void createTable(UUID whichSurvey) {
-//        surveyFieldTable.setDefaultEditor(Object.class, null);
-//        DefaultTableModel tableModel = new DefaultTableModel();
-//        tableModel.setColumnIdentifiers(new Object[]{"Service", "Survey"});
-//        for (Fields fields : fieldsDao.getAll()) {
-//            var name = fields.getName();
-//            var type = fields.getType();
-//            if (fields.getUuid().equals(whichSurvey))
-//                tableModel.addRow(new Object[]{name, type});
-//        }
-//        surveyFieldTable.setModel(tableModel);
-//    }
-    public void createTable(List<Fields> answers){
+    public void createTable(List<Fields> answers) {
         surveyFieldTable.setDefaultEditor(Object.class, null);
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new Object[]{"Service", "Survey"});
-        for (Fields fields: answers
-             ) {
+        for (Fields fields : answers
+        ) {
             String fieldName = fields.getName();
             var fieldType = fields.getType();
-        tableModel.addRow(new Object[]{fieldName,fieldType});
+            tableModel.addRow(new Object[]{fieldName, fieldType});
         }
         surveyFieldTable.setModel(tableModel);
     }
 
-    private void histChart(String chartTitle, List<String> myResults) {
+    private CategoryChart histChart(String chartTitle, List<String> myResults) {
         List<Integer> intList = new ArrayList<>();
         for (String s : myResults) intList.add(Integer.valueOf(s));
         CategoryChart myChart = new CategoryChartBuilder().title(chartTitle).xAxisTitle("Value").yAxisTitle("Number of answers").build();
@@ -116,10 +88,12 @@ public class ResultsAnswersGui {
                 .boxed()
                 .collect(Collectors.toList());
         myChart.addSeries("ResultSValues", categories, heights);
+        new XChartPanel<>(myChart);
+        return myChart;
     }
 
-    private void createStringAnswers(List<String> answers){
-//        ResultsAnswersGui resultsAnswersGui = new ResultsAnswersGui();
+    private void createStringAnswers(List<String> answers) {
+
         ResultsAnswersStringGui resultsAnswersStringGui = new ResultsAnswersStringGui();
         JPanel root = resultsAnswersStringGui.getStringPanel();
         JFrame frame = new JFrame();
@@ -129,12 +103,9 @@ public class ResultsAnswersGui {
         frame.setContentPane(root);
         frame.pack();
         frame.setLocationRelativeTo(null);
-        frame.setMinimumSize(new Dimension(300,300));
+        frame.setMinimumSize(new Dimension(300, 300));
         frame.setVisible(true);
     }
-
-
-
 
 
 }

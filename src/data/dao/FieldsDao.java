@@ -41,6 +41,7 @@ public class FieldsDao implements DAO<Fields> {
     }
 
     public void readFile(String filename) {
+        fieldsList.clear();
         try {
             Scanner data = new Scanner(new File(filename));
             while (data.hasNext()) {

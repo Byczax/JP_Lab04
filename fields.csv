@@ -4,3 +4,9 @@ b24e326d-03f3-4e08-bf2e-7e9fef7be26e;Feeling;STRING
 b24e326d-03f3-4e08-bf2e-7e9fef7be26e;Length;INTEGER
 a7839a27-b270-48a8-ba9b-2c90af6c795c;How long;INTEGER
 a7839a27-b270-48a8-ba9b-2c90af6c795c;Comment;STRING
+fc8feb76-37ce-469d-966e-d9e5584b7c96;Speed;INTEGER
+fc8feb76-37ce-469d-966e-d9e5584b7c96;Quality;INTEGER
+fc8feb76-37ce-469d-966e-d9e5584b7c96;Quantity;INTEGER
+fc8feb76-37ce-469d-966e-d9e5584b7c96;Time;INTEGER
+fc8feb76-37ce-469d-966e-d9e5584b7c96;Service man;STRING
+fc8feb76-37ce-469d-966e-d9e5584b7c96;Car number;STRING

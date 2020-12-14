@@ -1,7 +1,6 @@
 package data.dao;
 
 import data.models.Results;
-import data.models.Service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,25 +11,6 @@ import java.util.*;
 public class ResultsDao implements DAO<Results> {
     List<Results> resultsList = new ArrayList<>();
     String resultsFileName = "results.csv";
-
-    List<List<String>> answersList = new ArrayList<>();
-
-    public List<List<String>> getAnswersList() {
-        return answersList;
-    }
-
-    public void setAnswersList(List<List<String>> answersList) {
-        this.answersList = answersList;
-    }
-    //    List<List<String>> answersList = new ArrayList<>();
-
-//    public void setAnswersList(List<List<String>> answersList) {
-//        this.answersList = answersList;
-//    }
-//
-//    public List<List<String>> getAnswersList() {
-//        return answersList;
-//    }
 
     @Override
     public List<Results> getAll() {
@@ -56,13 +36,13 @@ public class ResultsDao implements DAO<Results> {
 
     @Override
     public void readFile(String filename) {
+        resultsList.clear();
         try {
             Scanner data = new Scanner(new File(filename));
             while (data.hasNext()) {
-                List<String> answers = new ArrayList<>();
                 String row = data.nextLine();
-                String[] strData = row.split(";",-1);
-                answers.addAll(Arrays.asList(strData).subList(3, strData.length));
+                String[] strData = row.split(";", -1);
+                List<String> answers = new ArrayList<>(Arrays.asList(strData).subList(3, strData.length));
                 resultsList.add(new Results(strData[0], UUID.fromString(strData[1]), UUID.fromString(strData[2]), answers));
             }
         } catch (FileNotFoundException e) {
@@ -70,7 +50,6 @@ public class ResultsDao implements DAO<Results> {
             e.printStackTrace();
         }
     }
-
 
     public void addToFile(String filename, Results results) {
         try {
