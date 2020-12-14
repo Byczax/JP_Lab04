@@ -47,14 +47,7 @@ public class ResultsAnswersGui {
             if (fieldType.equals(FieldType.STRING)) {
                 createStringAnswers(answers);
             } else if (fieldType.equals(FieldType.INTEGER)) {
-                histChart(fieldName,answers);
-//                chartData.addValue();
-//                CategoryChart chart = histChart(fieldName, answers);
-//                ExampleChart<CategoryChart> exampleChart = new BarChart01();
-//                CategoryChart chart = exampleChart.getChart();
-//                new SwingWrapper<CategoryChart>(chart).displayChart();
-
-//                    new SwingWrapper<CategoryChart>(chart).displayChart();
+                histChart(fieldName, answers);
             }
         });
     }
@@ -80,15 +73,6 @@ public class ResultsAnswersGui {
         List<Integer> intList = new ArrayList<>();
         for (String s : myResults) intList.add(Integer.valueOf(s));
         DefaultCategoryDataset chartData = new DefaultCategoryDataset();
-//        CategoryChart myChart = new CategoryChartBuilder()
-//                .width(800)
-//                .height(600)
-//                .title(chartTitle)
-//                .xAxisTitle("Value")
-//                .yAxisTitle("Number of answers")
-//                .build();
-
-//        myChart.getStyler().setPlotGridLinesVisible(true);
 
         List<Integer> categories = IntStream.range(0, 11).boxed().collect(Collectors.toList());
         List<Integer> heights = categories.stream()
@@ -97,38 +81,25 @@ public class ResultsAnswersGui {
                         .count()))
                 .boxed()
                 .collect(Collectors.toList());
-        int i =0;
-        for (int value: heights
-             ) {
-            chartData.addValue(value,"value",String.valueOf(i));
+        int i = 0;
+        for (int value : heights
+        ) {
+            chartData.addValue(value, "value", String.valueOf(i));
             i++;
         }
 
-        JFreeChart barChart = ChartFactory.createBarChart(chartTitle,"Value","Number of answers",
-                            chartData);
-            ChartPanel chartPanel = new ChartPanel(barChart);
-            chartPanel.setPreferredSize(new Dimension(800,600));
-//            JPanel root = resultsAnswersStringGui.getStringPanel();
-            JFrame frame = new JFrame();
-//            resultsAnswersStringGui.createList(answers);
-            frame.setTitle("Surveys results");
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setContentPane(chartPanel);
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setMinimumSize(new Dimension(800, 600));
-            frame.setVisible(true);
-//            BarChart_AWT chart = new BarChart_AWT();
-//            chart.pack( );
-//            RefineryUtilities.centerFrameOnScreen( chart );
-//            chart.setVisible( true );
-//                    PlotOrientation.VERTICAL,
-//                    true,true,false);
-
-//        chartData.setValue();
-//        myChart.addSeries("ResultSValues", categories, heights);
-//        new XChartPanel<>(myChart);
-//        return myChart;
+        JFreeChart barChart = ChartFactory.createBarChart(chartTitle, "Value", "Number of answers",
+                chartData);
+        ChartPanel chartPanel = new ChartPanel(barChart);
+        chartPanel.setPreferredSize(new Dimension(800, 600));
+        JFrame frame = new JFrame();
+        frame.setTitle("Surveys results");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setContentPane(chartPanel);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setMinimumSize(new Dimension(800, 600));
+        frame.setVisible(true);
     }
 
     private void createStringAnswers(List<String> answers) {
