@@ -5,9 +5,6 @@ import data.models.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -15,16 +12,16 @@ import java.util.UUID;
 public class ClientFillGui {
     private JPanel mainFillPanel;
     private JTable surveysTable;
-    private JButton fillChoosenSurveyButton;
+    private JButton fillChosenSurveyButton;
 
-    private ConnectDao connectDao = new ConnectDao();
-    private ServiceDAO serviceDAO = new ServiceDAO();
-    private SurveyDAO surveyDAO = new SurveyDAO();
-    private FieldsDao fieldsDao = new FieldsDao();
-    private ResultsDao resultsDao = new ResultsDao();
+    private final ConnectDAO connectDao = new ConnectDAO();
+    private final ServiceDAO serviceDAO = new ServiceDAO();
+    private final SurveyDAO surveyDAO = new SurveyDAO();
+    private final FieldsDAO fieldsDao = new FieldsDAO();
+    private final ResultsDAO resultsDao = new ResultsDAO();
 
     public ClientFillGui() {
-        fillChoosenSurveyButton.addActionListener(e -> {
+        fillChosenSurveyButton.addActionListener(e -> {
             int id = surveysTable.getSelectedRow();
             String serviceName = surveysTable.getValueAt(id, 0).toString();
             String surveyName = surveysTable.getValueAt(id, 1).toString();

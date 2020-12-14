@@ -1,9 +1,13 @@
 package data.gui.results;
 
-import data.dao.FieldsDao;
-import data.dao.ResultsDao;
-import data.dao.SurveyDAO;
-import data.models.*;
+import data.models.FieldType;
+import data.models.Fields;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.RefineryUtilities;
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
 import org.knowm.xchart.SwingWrapper;
@@ -12,8 +16,6 @@ import org.knowm.xchart.XChartPanel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,11 +25,6 @@ public class ResultsAnswersGui {
     private JPanel ResultAnswerPanel;
     private JTable surveyFieldTable;
     private JButton seeResultsButton;
-
-    private final FieldsDao fieldsDao = new FieldsDao();
-    private ResultsDao resultsDao = new ResultsDao();
-    private SurveyDAO surveyDAO = new SurveyDAO();
-    private ResultsGui resultsGui = new ResultsGui();
 
     List<List<String>> answersList = new ArrayList<>();
 
@@ -50,8 +47,12 @@ public class ResultsAnswersGui {
             if (fieldType.equals(FieldType.STRING)) {
                 createStringAnswers(answers);
             } else if (fieldType.equals(FieldType.INTEGER)) {
-
-                CategoryChart chart = histChart(fieldName, answers);
+                histChart(fieldName,answers);
+//                chartData.addValue();
+//                CategoryChart chart = histChart(fieldName, answers);
+//                ExampleChart<CategoryChart> exampleChart = new BarChart01();
+//                CategoryChart chart = exampleChart.getChart();
+//                new SwingWrapper<CategoryChart>(chart).displayChart();
 
 //                    new SwingWrapper<CategoryChart>(chart).displayChart();
             }
@@ -75,21 +76,59 @@ public class ResultsAnswersGui {
         surveyFieldTable.setModel(tableModel);
     }
 
-    private CategoryChart histChart(String chartTitle, List<String> myResults) {
+    private void histChart(String chartTitle, List<String> myResults) {
         List<Integer> intList = new ArrayList<>();
         for (String s : myResults) intList.add(Integer.valueOf(s));
-        CategoryChart myChart = new CategoryChartBuilder().title(chartTitle).xAxisTitle("Value").yAxisTitle("Number of answers").build();
-        myChart.getStyler().setPlotGridLinesVisible(true);
+        DefaultCategoryDataset chartData = new DefaultCategoryDataset();
+//        CategoryChart myChart = new CategoryChartBuilder()
+//                .width(800)
+//                .height(600)
+//                .title(chartTitle)
+//                .xAxisTitle("Value")
+//                .yAxisTitle("Number of answers")
+//                .build();
+
+//        myChart.getStyler().setPlotGridLinesVisible(true);
+
         List<Integer> categories = IntStream.range(0, 11).boxed().collect(Collectors.toList());
-        List<Long> heights = categories.stream()
-                .mapToLong(category -> intList.stream()
+        List<Integer> heights = categories.stream()
+                .mapToInt(category -> Math.toIntExact(intList.stream()
                         .filter(answer -> answer.equals(category))
-                        .count())
+                        .count()))
                 .boxed()
                 .collect(Collectors.toList());
-        myChart.addSeries("ResultSValues", categories, heights);
-        new XChartPanel<>(myChart);
-        return myChart;
+        int i =0;
+        for (int value: heights
+             ) {
+            chartData.addValue(value,"value",String.valueOf(i));
+            i++;
+        }
+
+        JFreeChart barChart = ChartFactory.createBarChart(chartTitle,"Value","Number of answers",
+                            chartData);
+            ChartPanel chartPanel = new ChartPanel(barChart);
+            chartPanel.setPreferredSize(new Dimension(800,600));
+//            JPanel root = resultsAnswersStringGui.getStringPanel();
+            JFrame frame = new JFrame();
+//            resultsAnswersStringGui.createList(answers);
+            frame.setTitle("Surveys results");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setContentPane(chartPanel);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setMinimumSize(new Dimension(800, 600));
+            frame.setVisible(true);
+//            BarChart_AWT chart = new BarChart_AWT();
+//            chart.pack( );
+//            RefineryUtilities.centerFrameOnScreen( chart );
+//            chart.setVisible( true );
+//                    PlotOrientation.VERTICAL,
+//                    true,true,false);
+
+//        chartData.setValue();
+//        myChart.addSeries("ResultSValues", categories, heights);
+//        new XChartPanel<>(myChart);
+//        return myChart;
     }
 
     private void createStringAnswers(List<String> answers) {

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
-public class ConnectDao implements DAO<Connection> {
+public class ConnectDAO implements DAO<Connection> {
     List<Connection> connections = new ArrayList<>();
     String connectionsFileName = "connections.csv";
 

@@ -6,9 +6,6 @@ import data.models.Service;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import static data.gui.Gui.*;
 
 public class ManagerServiceGui extends JFrame {
@@ -25,82 +22,69 @@ public class ManagerServiceGui extends JFrame {
 
     ManagerServiceGui() {
 
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                boolean exist = existsInTable(serviceTable, serviceName.getText());
+        addButton.addActionListener(e -> {
+            boolean exist = existsInTable(serviceTable, serviceName.getText());
+            if (exist) {
+                JOptionPane.showMessageDialog(null, "Name exist, write new name");
+                serviceName.setText("");
+                return;
+            }
+            addToTable(serviceTable, serviceName.getText(), serviceDescription.getText());
+            serviceDAO.add(new Service(serviceName.getText(), serviceDescription.getText()));
+            serviceName.setText("");
+            serviceDescription.setText("");
+            JOptionPane.showMessageDialog(null, "Added to table");
+        });
+        clearButton.addActionListener(e -> {
+            serviceName.setText("");
+            serviceDescription.setText("");
+        });
+        deleteButton.addActionListener(e -> {
+            int id = serviceTable.getSelectedRow();
+            removeFromTable(serviceTable, id);
+            serviceDAO.delete(serviceTable.getValueAt(id, 0).toString());
+            JOptionPane.showMessageDialog(null, "Removed from table");
+
+        });
+        editButton.addActionListener(e -> {
+            boolean exist = true;
+            int id = serviceTable.getSelectedRow();
+            String oldName = serviceTable.getValueAt(id, 0).toString();
+            var newName =
+                    JOptionPane.showInputDialog(null,
+                            "Write new name",
+                            "New name",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            serviceTable.getValueAt(id, 0).toString()).toString();
+            while (exist) {
+                exist = existsInTable(serviceTable, newName);
                 if (exist) {
-                    JOptionPane.showMessageDialog(null, "Name exist, write new name");
-                    serviceName.setText("");
-                    return;
+                    newName =
+                            JOptionPane.showInputDialog(null,
+                                    "Name exist, write new name",
+                                    "New name",
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    null,
+                                    serviceTable.getValueAt(id, 0).toString()).toString();
                 }
-                addToTable(serviceTable, serviceName.getText(), serviceDescription.getText());
-                serviceDAO.add(new Service(serviceName.getText(), serviceDescription.getText()));
-                serviceName.setText("");
-                serviceDescription.setText("");
-                JOptionPane.showMessageDialog(null, "Added to table");
             }
-        });
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                serviceName.setText("");
-                serviceDescription.setText("");
-            }
-        });
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int id = serviceTable.getSelectedRow();
-                removeFromTable(serviceTable, id);
-                serviceDAO.delete(serviceTable.getValueAt(id,0).toString());
-                JOptionPane.showMessageDialog(null, "Removed from table");
+            var newDescription = JOptionPane.showInputDialog(null,
+                    "Write new description",
+                    "New description",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    null,
+                    serviceTable.getValueAt(id, 1).toString()).toString();
 
-            }
-        });
-        editButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                boolean exist = true;
-                int id = serviceTable.getSelectedRow();
-                String oldName = serviceTable.getValueAt(id, 0).toString();
-                var newName =
-                        JOptionPane.showInputDialog(null,
-                                "Write new name",
-                                "New name",
-                                JOptionPane.PLAIN_MESSAGE,
-                                null,
-                                null,
-                                serviceTable.getValueAt(id,0).toString()).toString();
-                while (exist) {
-                    exist = existsInTable(serviceTable, newName);
-                    if (exist) {
-                        newName =
-                                JOptionPane.showInputDialog(null,
-                                        "Name exist, write new name",
-                                        "New name",
-                                        JOptionPane.PLAIN_MESSAGE,
-                                        null,
-                                        null,
-                                        serviceTable.getValueAt(id,0).toString()).toString();
-                    }
-                }
-                var newDescription = JOptionPane.showInputDialog(null,
-                        "Write new description",
-                        "New description",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        null,
-                        serviceTable.getValueAt(id,1).toString()).toString();
-
-                editTable(serviceTable, newName, newDescription, id);
-                String[] newData = {newName, newDescription};
-                serviceDAO.update(oldName, newData);
-                JOptionPane.showMessageDialog(null, "Data edited.");
-            }
+            editTable(serviceTable, newName, newDescription, id);
+            String[] newData = {newName, newDescription};
+            serviceDAO.update(oldName, newData);
+            JOptionPane.showMessageDialog(null, "Data edited.");
         });
     }
-
 
     public JPanel getServiceMainPanel() {
         return serviceMainPanel;
@@ -115,8 +99,4 @@ public class ManagerServiceGui extends JFrame {
         }
         serviceTable.setModel(tableModel);
     }
-
-
-
-
 }

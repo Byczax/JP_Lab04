@@ -1,6 +1,6 @@
 package data.gui.manager;
 
-import data.dao.ConnectDao;
+import data.dao.ConnectDAO;
 import data.dao.ServiceDAO;
 import data.dao.SurveyDAO;
 import data.models.Connection;
@@ -9,9 +9,6 @@ import data.models.Survey;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.UUID;
 
 public class ManagerConnectGui {
     private JButton linkButton;
@@ -21,20 +18,16 @@ public class ManagerConnectGui {
 
     ServiceDAO serviceDAO = new ServiceDAO();
     SurveyDAO surveyDAO = new SurveyDAO();
-    ConnectDao connectDao = new ConnectDao();
+    ConnectDAO connectDao = new ConnectDAO();
 
     public ManagerConnectGui() {
-        linkButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int idSurvey = surveysTable.getSelectedRow();
-                int idService = servicesTable.getSelectedRow();
-                String surveyName =surveysTable.getValueAt(idSurvey, 0).toString();
-                String serviceName = servicesTable.getValueAt(idService, 0).toString();
-//                var w = findNameService(serviceName).getUUID();
-                connectDao.add(new Connection(findNameService(serviceName).getUUID(),findNameSurvey(surveyName).getUUID()));
-                JOptionPane.showMessageDialog(null, "Connection established!");
-            }
+        linkButton.addActionListener(e -> {
+            int idSurvey = surveysTable.getSelectedRow();
+            int idService = servicesTable.getSelectedRow();
+            String surveyName = surveysTable.getValueAt(idSurvey, 0).toString();
+            String serviceName = servicesTable.getValueAt(idService, 0).toString();
+            connectDao.add(new Connection(findNameService(serviceName).getUUID(), findNameSurvey(surveyName).getUUID()));
+            JOptionPane.showMessageDialog(null, "Connection established!");
         });
     }
 
@@ -62,11 +55,12 @@ public class ManagerConnectGui {
         surveysTable.setModel(tableModel);
     }
 
-    private Service findNameService(String sName){
+    private Service findNameService(String sName) {
         var service = serviceDAO.getAll().stream().filter(name -> name.getName().equals(sName)).findFirst();
         return service.orElse(null);
     }
-    private Survey findNameSurvey(String sName){
+
+    private Survey findNameSurvey(String sName) {
         var survey = surveyDAO.getAll().stream().filter(name -> name.getName().equals(sName)).findFirst();
         return survey.orElse(null);
     }

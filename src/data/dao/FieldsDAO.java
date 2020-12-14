@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
-public class FieldsDao implements DAO<Fields> {
+public class FieldsDAO implements DAO<Fields> {
     List<Fields> fieldsList = new ArrayList<>();
     String fieldsFileName = "fields.csv";
 

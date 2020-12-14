@@ -23,7 +23,7 @@ public class ServiceDAO implements DAO<Service> {
 
     public void add(Service service) {
         serviceList.add(service);
-        addToFile(serviceFileName,service);
+        addToFile(serviceFileName, service);
     }
 
     public void update(String old, String[] params) {
@@ -45,7 +45,7 @@ public class ServiceDAO implements DAO<Service> {
             Scanner data = new Scanner(new File(filename));
             while (data.hasNext()) {
                 String row = data.nextLine();
-                String[] strData = row.split(";",-1);
+                String[] strData = row.split(";", -1);
                 serviceList.add(new Service(UUID.fromString(strData[0]), strData[1], strData[2]));
             }
         } catch (FileNotFoundException e) {
@@ -58,7 +58,7 @@ public class ServiceDAO implements DAO<Service> {
         try {
             FileWriter updatedFile = new FileWriter(filename, false);
             for (Service service : serviceList) {
-                updatedFile.write( service.getUUID() + ";" + service.getName() + ";" + service.getDescription()+"\n");
+                updatedFile.write(service.getUUID() + ";" + service.getName() + ";" + service.getDescription() + "\n");
             }
             updatedFile.close();
         } catch (IOException e) {
@@ -70,14 +70,14 @@ public class ServiceDAO implements DAO<Service> {
     public void addToFile(String filename, Service service) {
         try {
             FileWriter fileToUpdate = new FileWriter(filename, true);
-            fileToUpdate.write(service.getUUID() + ";" + service.getName() + ";" + service.getDescription()+"\n");
+            fileToUpdate.write(service.getUUID() + ";" + service.getName() + ";" + service.getDescription() + "\n");
             fileToUpdate.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Service loadServiceData(String name){
+    public Service loadServiceData(String name) {
         var service = serviceList.stream().filter(e -> e.getName().equals(name)).findFirst();
         return service.orElse(null);
     }

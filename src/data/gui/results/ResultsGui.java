@@ -6,8 +6,6 @@ import data.models.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -17,11 +15,11 @@ public class ResultsGui {
     private JPanel mainPanel;
     private JButton seeResultsButton;
 
-    private ConnectDao connectDao = new ConnectDao();
+    private ConnectDAO connectDao = new ConnectDAO();
     private ServiceDAO serviceDAO = new ServiceDAO();
     private SurveyDAO surveyDAO = new SurveyDAO();
-    private FieldsDao fieldsDao = new FieldsDao();
-    private ResultsDao resultsDao = new ResultsDao();
+    private FieldsDAO fieldsDao = new FieldsDAO();
+    private ResultsDAO resultsDao = new ResultsDAO();
 
 
     List<List<String>> answersList = new ArrayList<>();

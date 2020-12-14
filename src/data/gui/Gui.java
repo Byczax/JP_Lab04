@@ -11,7 +11,6 @@ public class Gui {
         String curEntry = name;
 
         for (int i = 0; i < rowCount; i++) {
-//            String rowEntry = "";
             String rowEntry = table.getValueAt(i, 0).toString();
             if (rowEntry.equalsIgnoreCase(curEntry)) {
                 return true;

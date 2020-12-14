@@ -22,7 +22,7 @@ public class SurveyDAO implements DAO<Survey> {
 
     public void add(Survey survey) {
         surveyList.add(survey);
-        addToFile(surveysFileName,survey);
+        addToFile(surveysFileName, survey);
     }
 
     public void update(String old, String[] params) {
@@ -44,7 +44,7 @@ public class SurveyDAO implements DAO<Survey> {
             Scanner data = new Scanner(new File(filename));
             while (data.hasNext()) {
                 String row = data.nextLine();
-                String[] strData = row.split(";",-1);
+                String[] strData = row.split(";", -1);
                 surveyList.add(new Survey(UUID.fromString(strData[0]), strData[1], strData[2]));
             }
         } catch (FileNotFoundException e) {
@@ -57,7 +57,7 @@ public class SurveyDAO implements DAO<Survey> {
         try {
             FileWriter updatedFile = new FileWriter(filename, false);
             for (Survey service : surveyList) {
-                updatedFile.write(service.getUUID() + ";" + service.getName() + ";" + service.getDescription()+"\n");
+                updatedFile.write(service.getUUID() + ";" + service.getName() + ";" + service.getDescription() + "\n");
             }
             updatedFile.close();
         } catch (IOException e) {
@@ -69,14 +69,14 @@ public class SurveyDAO implements DAO<Survey> {
     public void addToFile(String filename, Survey service) {
         try {
             FileWriter fileToUpdate = new FileWriter(filename, true);
-            fileToUpdate.write(service.getUUID() + ";" + service.getName() + ";" + service.getDescription()+"\n");
+            fileToUpdate.write(service.getUUID() + ";" + service.getName() + ";" + service.getDescription() + "\n");
             fileToUpdate.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Survey loadSurveyData(String name){
+    public Survey loadSurveyData(String name) {
         var survey = surveyList.stream().filter(e -> e.getName().equals(name)).findFirst();
         return survey.orElse(null);
     }

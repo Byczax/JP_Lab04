@@ -2,8 +2,6 @@ package data.models;
 
 import java.util.UUID;
 
-;
-
 public class Fields {
     String name;
     FieldType type;

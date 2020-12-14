@@ -8,9 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-public class ResultsDao implements DAO<Results> {
-    List<Results> resultsList = new ArrayList<>();
-    String resultsFileName = "results.csv";
+public class ResultsDAO implements DAO<Results> {
+    private final List<Results> resultsList = new ArrayList<>();
+    private final String resultsFileName = "results.csv";
 
     @Override
     public List<Results> getAll() {
@@ -24,17 +24,15 @@ public class ResultsDao implements DAO<Results> {
         addToFile(resultsFileName, results);
     }
 
-    @Override
     public void update(String t, String[] params) {
 
     }
 
-    @Override
+
     public void delete(String t) {
 
     }
 
-    @Override
     public void readFile(String filename) {
         resultsList.clear();
         try {
@@ -51,7 +49,7 @@ public class ResultsDao implements DAO<Results> {
         }
     }
 
-    public void addToFile(String filename, Results results) {
+    private void addToFile(String filename, Results results) {
         try {
             FileWriter fileToUpdate = new FileWriter(filename, true);
             fileToUpdate.write(results.getUser() + ";" + results.getServiceId() + ";" + results.getSurveyId());
