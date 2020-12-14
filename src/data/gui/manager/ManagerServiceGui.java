@@ -6,6 +6,9 @@ import data.models.Service;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import static data.gui.Gui.*;
 
 public class ManagerServiceGui extends JFrame {
@@ -39,12 +42,15 @@ public class ManagerServiceGui extends JFrame {
             serviceName.setText("");
             serviceDescription.setText("");
         });
-        deleteButton.addActionListener(e -> {
-            int id = serviceTable.getSelectedRow();
-            removeFromTable(serviceTable, id);
-            serviceDAO.delete(serviceTable.getValueAt(id, 0).toString());
-            JOptionPane.showMessageDialog(null, "Removed from table");
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int id = serviceTable.getSelectedRow();
+                serviceDAO.delete(serviceTable.getValueAt(id, 0).toString());
+                removeFromTable(serviceTable, id);
+                JOptionPane.showMessageDialog(null, "Removed from table");
 
+            }
         });
         editButton.addActionListener(e -> {
             boolean exist = true;

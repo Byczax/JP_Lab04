@@ -80,8 +80,8 @@ public class ManagerSurveysGui {
         });
         deleteButton.addActionListener(e -> {
             int id = surveyTable.getSelectedRow();
-            removeFromTable(surveyTable, id);
             surveyDAO.delete(surveyTable.getValueAt(id, 0).toString());
+            removeFromTable(surveyTable, id);
             JOptionPane.showMessageDialog(null, "Removed from table");
         });
 

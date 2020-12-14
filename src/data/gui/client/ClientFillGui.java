@@ -43,16 +43,16 @@ public class ClientFillGui {
                 if (field.getType().equals(FieldType.INTEGER)) {
 
                     filledField = JOptionPane.showInputDialog(null,
-                            field.getName(),
                             "Question " + i + "(Integer value 1-10)",
+                            field.getName(),
                             JOptionPane.PLAIN_MESSAGE
                     );
                     while (!correct) {
                         if (Integer.parseInt(filledField) < 0 || Integer.parseInt(filledField) > 10) {
 
                             filledField = JOptionPane.showInputDialog(null,
-                                    field.getName(),
                                     "Wrong value, enter value again, numer 0-10",
+                                    field.getName(),
                                     JOptionPane.PLAIN_MESSAGE
                             );
                         } else {
@@ -62,8 +62,8 @@ public class ClientFillGui {
                     }
                 } else {
                     answers.add(JOptionPane.showInputDialog(null,
-                            field.getName(),
                             "Question " + i,
+                            field.getName(),
                             JOptionPane.PLAIN_MESSAGE));
                 }
                 i++;

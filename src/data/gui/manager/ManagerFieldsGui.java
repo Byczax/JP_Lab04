@@ -78,8 +78,8 @@ public class ManagerFieldsGui {
         });
         deleteButton.addActionListener(e -> {
             int id = fieldsTable.getSelectedRow();
+            fieldsDao.delete(fieldsTable.getValueAt(id, 0).toString());
             removeFromTable(fieldsTable, id);
-            surveyDAO.delete(fieldsTable.getValueAt(id, 0).toString());
             JOptionPane.showMessageDialog(null, "Removed from table");
         });
     }
